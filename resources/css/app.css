@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.flashes {
+  position: fixed;
+  bottom : 100%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  padding: 20px;
+  transition: transform 500ms, height 300ms;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+}
+
+.flashes.active {
+  transform: translate(-50%, 100%);
+}
+
+.flash {
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 2px 3px 10px rgba(0,0,0,0.2);
+}
+
+.flash--info {
+  background-color: theme('colors.blue.500');
+}
+.flash--danger {
+  background-color: theme('colors.red.500');
+}
+
+.flash--success {
+  background-color: theme('colors.green.500');
+}
+
+.flash--warning {
+  background-color: theme('colors.orange.500');
+}
