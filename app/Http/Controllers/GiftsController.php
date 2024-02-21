@@ -23,26 +23,28 @@ class GiftsController extends Controller
         $gifts = Gift::wonBy(Auth::user())
             ->withCountWins(Auth::user())
             ->withCountWins(Auth::user(), WonGiftStatusEnum::pending)
+            ->whereHasWins(WonGiftStatusEnum::pending)
             ->get();
+
         return view('gifts/index', ['wonGifts' => $gifts]);
     }
 
     public function show(int $id)
     {
         $gift = Gift::withCountWins(Auth::user())
-        ->withCountWins(Auth::user(), WonGiftStatusEnum::pending)
-        ->withCountWins(Auth::user(), WonGiftStatusEnum::used)
+            ->withCountWins(Auth::user(), WonGiftStatusEnum::pending)
+            ->withCountWins(Auth::user(), WonGiftStatusEnum::used)
             ->findOrFail($id);
 
         $wonGift = $gift->oldestWon(Auth::user(), WonGiftStatusEnum::pending);
 
-        if($wonGift) {
+        if ($wonGift) {
             $ownerLink = route('gifts.pendingDetail', $wonGift);
 
             $qrcode = (new QRCode(new QROptions([
                 'outputType' => QROutputInterface::GDIMAGE_WEBP,
-                'scale' => 8
-                ])))->render($ownerLink);
+                'scale' => 8,
+            ])))->render($ownerLink);
         }
 
         return view('gifts/show', ['gift' => $gift, 'qrcode' => $qrcode ?? null, 'ownerLink' => $ownerLink ?? null]);
@@ -50,7 +52,7 @@ class GiftsController extends Controller
 
     public function update(Request $request, Gift $gift)
     {
-        $errorsBag = 'gift' . $gift->id;
+        $errorsBag = 'gift'.$gift->id;
 
         try {
             $gift->fill($request->validate([
@@ -64,26 +66,29 @@ class GiftsController extends Controller
             throw $e;
         }
 
-        if(!$gift->isDirty()) {
+        if (! $gift->isDirty()) {
             Flashes::push("Le cadeau \"$gift->name\" n'a pas été mis à jour car aucun changement n'a été detecté");
-            return Redirect::route('giftsBag')->with('giftNoUpdate' . $gift->id, true);
+
+            return Redirect::route('giftsBag')->with('giftNoUpdate'.$gift->id, true);
         }
 
         $gift->save();
 
         Flashes::push("le cadeau \"$gift->name\" à bien été mis à jour");
-        return Redirect::route('giftsBag')->with('giftUpdate' . $gift->id, true);
+
+        return Redirect::route('giftsBag')->with('giftUpdate'.$gift->id, true);
     }
 
     public function delete(Gift $gift)
     {
         $gift->delete();
+
         return Redirect::route('giftsBag');
     }
 
     public function store(Request $request)
     {
-        $request->user()->giftsBag->gifts()->create($request->validateWithBag('giftCreate',[
+        $request->user()->giftsBag->gifts()->create($request->validateWithBag('giftCreate', [
             'name' => 'required',
             'description' => 'required',
             'relative_probability' => 'required|numeric|between:0,100',
@@ -100,10 +105,13 @@ class GiftsController extends Controller
 
         $oldestWonPending = null;
 
-        if($gift) $oldestWonPending = $gift->oldestWon($request->user(), WonGiftStatusEnum::pending);
+        if ($gift) {
+            $oldestWonPending = $gift->oldestWon($request->user(), WonGiftStatusEnum::pending);
+        }
 
-        if(!$gift || !$oldestWonPending) {
+        if (! $gift || ! $oldestWonPending) {
             Flashes::push("tu n'as pas de cadeau \"$gift->name\" en attente", FlashTypeEnum::danger);
+
             return back();
         }
 
@@ -114,17 +122,19 @@ class GiftsController extends Controller
         $oldestWonPending->update();
 
         Flashes::push("félicitation ta requète pour le cadeau \"$gift->name\" est bien été pris en compte !");
+
         return back();
     }
 
     public function confirm(Request $request, int $id)
     {
         $wonGift = WonGift::ownedBy($request->user())
-            ->where("status", WonGiftStatusEnum::pending)
+            ->where('status', WonGiftStatusEnum::pending)
             ->find($id);
 
-        if(!$wonGift) {
-            Flashes::push("Cadeau introuvable", FlashTypeEnum::danger);
+        if (! $wonGift) {
+            Flashes::push('Cadeau introuvable', FlashTypeEnum::danger);
+
             return redirect()->route('giftsBag');
         }
 
@@ -132,13 +142,14 @@ class GiftsController extends Controller
         $wonGift->update();
 
         Flashes::push("L'execution du cadeau \"{$wonGift->gift->name}\" est bien été pris en compte !");
+
         return redirect()->route('giftsBag');
     }
 
     public function pending()
     {
         $pendingGifts = Gift::ownedBy(Auth::user())
-            ->with('wons', function($builder) {
+            ->with('wons', function ($builder) {
                 $builder->where('status', WonGiftStatusEnum::pending);
             })
             ->whereHasWins(WonGiftStatusEnum::pending)
@@ -157,10 +168,12 @@ class GiftsController extends Controller
             ->where('status', WonGiftStatusEnum::pending)
             ->find($id);
 
-        if(!$win) {
-            Flashes::push("Erreur requète de cadeau introuvable", FlashTypeEnum::danger);
+        if (! $win) {
+            Flashes::push('Erreur requète de cadeau introuvable', FlashTypeEnum::danger);
+
             return redirect()->route('giftsBag');
         }
+
         return view('gifts/pendingDetail', [
             'win' => $win,
             'gift' => $win->gift,
