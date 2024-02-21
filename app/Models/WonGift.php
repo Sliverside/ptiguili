@@ -18,6 +18,7 @@ use Znck\Eloquent\Traits\BelongsToThrough;
  * @property WonGiftStatusEnum $status
  * @property-read \App\Models\Gift $gift
  * @property-read \App\Models\Wallet $wallet
+ *
  * @method static Builder|WonGift newModelQuery()
  * @method static Builder|WonGift newQuery()
  * @method static Builder|WonGift ownedBy(\App\Models\User $user)
@@ -28,6 +29,7 @@ use Znck\Eloquent\Traits\BelongsToThrough;
  * @method static Builder|WonGift whereStatus($value)
  * @method static Builder|WonGift whereUpdatedAt($value)
  * @method static Builder|WonGift whereWalletId($value)
+ *
  * @mixin \Eloquent
  */
 class WonGift extends Model
@@ -56,12 +58,12 @@ class WonGift extends Model
 
     public function scopeOwnedBy(Builder $builder, User $user)
     {
-        return $builder->whereRelation('owner', function(Builder $builder) use($user) {
+        return $builder->whereRelation('owner', function (Builder $builder) use ($user) {
             return $builder->where('users.id', $user->id);
         });
     }
 
     protected $casts = [
-        'status' => WonGiftStatusEnum::class
+        'status' => WonGiftStatusEnum::class,
     ];
 }

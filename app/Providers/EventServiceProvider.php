@@ -23,13 +23,13 @@ class EventServiceProvider extends ServiceProvider
     ];
 
     /**
-    * The model observers for your application.
-    *
-    * @var array
-    */
-   protected $observers = [
-       Wallet::class => [WalletObserver::class],
-   ];
+     * The model observers for your application.
+     *
+     * @var array
+     */
+    protected $observers = [
+        Wallet::class => [WalletObserver::class],
+    ];
 
     /**
      * Register any events for your application.

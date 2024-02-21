@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
     {
         User::factory(2)
             ->state(new Sequence(
-                fn ($sequence) => ['email' => 'user' . $sequence->index . '@exemple.com']))
+                fn ($sequence) => ['email' => 'user'.$sequence->index.'@exemple.com']))
             ->has(GiftsBag::factory(1)->has(Gift::factory(5)))
             ->has(Wallet::factory(1))
             ->create();

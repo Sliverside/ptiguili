@@ -4,15 +4,18 @@ namespace App\Models;
 
 use App\Enums\FlashTypeEnum;
 
-class Flash {
-  readonly String $class;
-  public function __construct(
-    readonly string $content,
-    readonly FlashTypeEnum $type = FlashTypeEnum::info,
-  ) {}
+class Flash
+{
+    public readonly string $class;
 
-  public function class()
-  {
-    return 'class="flash flash--' . $this->type->value . '"';
-  }
+    public function __construct(
+        readonly string $content,
+        readonly FlashTypeEnum $type = FlashTypeEnum::info,
+    ) {
+    }
+
+    public function class()
+    {
+        return 'class="flash flash--'.$this->type->value.'"';
+    }
 }

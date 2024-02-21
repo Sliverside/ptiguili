@@ -12,8 +12,9 @@ class WalletsController extends Controller
 {
     public function useCoin(Request $request)
     {
-        if($request->user()->wallet->coins <= 0) {
+        if ($request->user()->wallet->coins <= 0) {
             Flashes::push("tu n'as pas assez de points !", FlashTypeEnum::danger);
+
             return back();
         }
 
@@ -21,15 +22,16 @@ class WalletsController extends Controller
             ->where('id', $request->user()->partner_id)
             ->first();
 
-        if(!$partner) {
-            Flashes::push("Impossible de trouver ton partenaire", FlashTypeEnum::danger);
+        if (! $partner) {
+            Flashes::push('Impossible de trouver ton partenaire', FlashTypeEnum::danger);
+
             return back();
         }
 
         $request->user()->wallet->coins -= 1;
         $request->user()->wallet->update();
 
-        if($partner->giftsBag->success) {
+        if ($partner->giftsBag->success) {
             $gift = Gift::randomGift($partner->gifts);
             $request->user()->wallet->wonGifts()->attach($gift);
             Flashes::push("Bravo tu as gagner : $gift->name", FlashTypeEnum::success);
@@ -48,9 +50,9 @@ class WalletsController extends Controller
             ->firstOrFail();
         $gifts = [];
 
-        while($request->user()->wallet->coins > 0) {
+        while ($request->user()->wallet->coins > 0) {
             $request->user()->wallet->coins -= 1;
-            if($partner->giftsBag->success) {
+            if ($partner->giftsBag->success) {
                 $gifts[] = Gift::randomGift($partner->gifts);
             }
         }

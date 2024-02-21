@@ -1,11 +1,10 @@
 <?php
 
-use App\Http\Controllers\WalletsController;
 use App\Http\Controllers\GiftsBagsController;
 use App\Http\Controllers\GiftsController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\WalletsController;
 use App\Notifications\RegistrationRequest;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;

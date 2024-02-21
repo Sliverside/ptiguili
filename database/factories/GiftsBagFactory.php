@@ -17,7 +17,7 @@ class GiftsBagFactory extends Factory
     public function definition()
     {
         return [
-            'probability' => random_int(0, 1000) / 10
+            'probability' => random_int(0, 1000) / 10,
         ];
     }
 }

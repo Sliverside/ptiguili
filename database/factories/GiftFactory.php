@@ -19,7 +19,7 @@ class GiftFactory extends Factory
         return [
             'name' => fake()->sentence(random_int(1, 4)),
             'description' => fake()->text(),
-            'relative_probability' => random_int(0, 1000) / 10
+            'relative_probability' => random_int(0, 1000) / 10,
         ];
     }
 }

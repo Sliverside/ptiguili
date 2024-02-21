@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\WonGiftStatusEnum;
-use App\Models\Gift;
 use App\Models\GiftsBag;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
@@ -15,7 +13,7 @@ class GiftsBagsController extends Controller
     public function index()
     {
         $giftsBag = GiftsBag::whereBelongsTo(Auth::user())->with([
-            'gifts' => fn(HasMany $query) => $query->withProbability()->latest('gifts.id')
+            'gifts' => fn (HasMany $query) => $query->withProbability()->latest('gifts.id'),
         ])->first();
 
         return view('giftsBags.index', [
@@ -26,7 +24,7 @@ class GiftsBagsController extends Controller
 
     public function update(Request $request, GiftsBag $giftsBag)
     {
-        $giftsBag->update($request->validateWithBag('giftsBag',[
+        $giftsBag->update($request->validateWithBag('giftsBag', [
             'probability' => 'required|numeric|between:0,100',
         ]));
 

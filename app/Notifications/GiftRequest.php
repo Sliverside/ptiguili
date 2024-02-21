@@ -10,7 +10,6 @@ use Illuminate\Notifications\Notification;
 
 class GiftRequest extends Notification
 {
-
     /**
      * Create a new notification instance.
      *
@@ -20,7 +19,8 @@ class GiftRequest extends Notification
         private Gift $gift,
         private WonGift $wonGift,
         private User $winner
-    ) {}
+    ) {
+    }
 
     /**
      * Get the notification's delivery channels.
@@ -41,7 +41,7 @@ class GiftRequest extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
+        return (new MailMessage())
             ->line("Vous avez reçu une demande de cadeau de la part de {$this->winner->name}")
             ->line("Le cadeau est le suivant : {$this->gift->name}")
             ->line("Description : {$this->gift->description}")

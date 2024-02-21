@@ -3,10 +3,9 @@
 namespace App\Models;
 
 use App\Enums\WonGiftStatusEnum;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Znck\Eloquent\Traits\BelongsToThrough;
@@ -26,6 +25,7 @@ use Znck\Eloquent\Traits\BelongsToThrough;
  * @property-read int|null $wallets_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\WonGift> $wons
  * @property-read int|null $wons_count
+ *
  * @method static \Database\Factories\GiftFactory factory($count = null, $state = [])
  * @method static Builder|Gift newModelQuery()
  * @method static Builder|Gift newQuery()
@@ -42,17 +42,18 @@ use Znck\Eloquent\Traits\BelongsToThrough;
  * @method static Builder|Gift withCountWins(?\App\Models\User $user = null, ?\App\Enums\WonGiftStatusEnum $status = null)
  * @method static Builder|Gift withProbability()
  * @method static Builder|Gift wonBy(\App\Models\User $user)
+ *
  * @mixin \Eloquent
  */
 class Gift extends Model
 {
-    use HasFactory;
     use BelongsToThrough;
+    use HasFactory;
 
     protected $fillable = [
         'name',
         'description',
-        'relative_probability'
+        'relative_probability',
     ];
 
     public function giftsBag()
@@ -77,9 +78,13 @@ class Gift extends Model
 
     public function oldestWon(?User $user, ?WonGiftStatusEnum $status): ?WonGift
     {
-        return $this->hasOne(WonGift::class)->ofMany(['id' => 'min'], function(Builder $builder) use($user, $status) {
-            if($status) $builder->where('status', $status);
-            if($user) $builder->whereBelongsTo($user->wallet);
+        return $this->hasOne(WonGift::class)->ofMany(['id' => 'min'], function (Builder $builder) use ($user, $status) {
+            if ($status) {
+                $builder->where('status', $status);
+            }
+            if ($user) {
+                $builder->whereBelongsTo($user->wallet);
+            }
         })->first();
     }
 
@@ -106,39 +111,46 @@ class Gift extends Model
     public function scopeWithCountWins(Builder $builder, ?User $user = null, ?WonGiftStatusEnum $status = null): Builder
     {
         return $builder->withCount([
-            'wons as count_wins' . ($status ? '_' . $status->name : '')  => function(Builder $builder) use($user, $status) {
-                if($user) $builder->whereBelongsTo($user->wallet);
-                if($status) $builder->where('status', $status);
-            }
+            'wons as count_wins'.($status ? '_'.$status->name : '') => function (Builder $builder) use ($user, $status) {
+                if ($user) {
+                    $builder->whereBelongsTo($user->wallet);
+                }
+                if ($status) {
+                    $builder->where('status', $status);
+                }
+            },
         ]);
     }
 
     public function scopeWhereHasWins(Builder $builder, ?WonGiftStatusEnum $status = null)
     {
-        return $builder->whereHas('wons', function(Builder $builder) use($status) {
-            if($status) $builder->where('status', $status);
+        return $builder->whereHas('wons', function (Builder $builder) use ($status) {
+            if ($status) {
+                $builder->where('status', $status);
+            }
         });
     }
 
     public function scopeOwnedBy(Builder $builder, ?User $user = null): Builder
     {
-        return $builder->whereRelation('owner', function(Builder $builder) use($user) {
+        return $builder->whereRelation('owner', function (Builder $builder) use ($user) {
             return $builder->where('users.id', $user->id);
         });
     }
 
     /**
-     * @param \Illuminate\Database\Eloquent\Collection<int,self> $gifts
+     * @param  \Illuminate\Database\Eloquent\Collection<int,self>  $gifts
      * @return self
      * */
     public static function randomGift(Collection $gifts)
     {
         $lotterie = new Collection();
-        foreach($gifts as $gift) {
-            for ($i=0; $i < $gift->relative_probability * 10; $i++) {
+        foreach ($gifts as $gift) {
+            for ($i = 0; $i < $gift->relative_probability * 10; $i++) {
                 $lotterie->add($gift);
             }
         }
+
         return $lotterie->random();
     }
 }

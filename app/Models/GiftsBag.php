@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Gift> $gifts
  * @property-read int|null $gifts_count
  * @property-read \App\Models\User $user
+ *
  * @method static \Database\Factories\GiftsBagFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|GiftsBag newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|GiftsBag newQuery()
@@ -22,6 +23,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|GiftsBag whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|GiftsBag whereProbability($value)
  * @method static \Illuminate\Database\Eloquent\Builder|GiftsBag whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class GiftsBag extends Model
@@ -29,8 +31,9 @@ class GiftsBag extends Model
     use HasFactory;
 
     public $timestamps = false;
+
     protected $fillable = [
-        'probability'
+        'probability',
     ];
 
     public function user()
@@ -46,7 +49,7 @@ class GiftsBag extends Model
     public function success(): Attribute
     {
         return Attribute::make(
-            get: fn($value, $attributes) => $attributes['probability'] * 10 > random_int(1, 1000)
+            get: fn ($value, $attributes) => random_int(1, 1000) < $attributes['probability'] * 10
         );
     }
 }
