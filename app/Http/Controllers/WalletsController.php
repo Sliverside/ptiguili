@@ -34,9 +34,9 @@ class WalletsController extends Controller
         if ($partner->giftsBag->success) {
             $gift = Gift::randomGift($partner->gifts);
             $request->user()->wallet->wonGifts()->attach($gift);
-            Flashes::push("Bravo tu as gagner : $gift->name", FlashTypeEnum::success);
+            Flashes::push("Bravo tu as gagné : $gift->name", FlashTypeEnum::success);
         } else {
-            Flashes::push("Dommage tu n'as rien gagner... :/", FlashTypeEnum::warning);
+            Flashes::push("Dommage tu n'as rien gagné... :/", FlashTypeEnum::warning);
         }
 
         return back();
