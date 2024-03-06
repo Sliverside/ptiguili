@@ -6,26 +6,6 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * App\Models\GiftsBag
- *
- * @property int $id
- * @property int $user_id
- * @property string $probability
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Gift> $gifts
- * @property-read int|null $gifts_count
- * @property-read \App\Models\User $user
- *
- * @method static \Database\Factories\GiftsBagFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder|GiftsBag newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|GiftsBag newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|GiftsBag query()
- * @method static \Illuminate\Database\Eloquent\Builder|GiftsBag whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|GiftsBag whereProbability($value)
- * @method static \Illuminate\Database\Eloquent\Builder|GiftsBag whereUserId($value)
- *
- * @mixin \Eloquent
- */
 class GiftsBag extends Model
 {
     use HasFactory;

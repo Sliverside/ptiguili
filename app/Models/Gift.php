@@ -10,41 +10,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Znck\Eloquent\Traits\BelongsToThrough;
 
-/**
- * App\Models\Gift
- *
- * @property int $id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int $gifts_bag_id
- * @property string $name
- * @property string $description
- * @property string $relative_probability
- * @property-read \App\Models\GiftsBag $giftsBag
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Wallet> $wallets
- * @property-read int|null $wallets_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\WonGift> $wons
- * @property-read int|null $wons_count
- *
- * @method static \Database\Factories\GiftFactory factory($count = null, $state = [])
- * @method static Builder|Gift newModelQuery()
- * @method static Builder|Gift newQuery()
- * @method static Builder|Gift ownedBy(?\App\Models\User $user = null)
- * @method static Builder|Gift query()
- * @method static Builder|Gift whereCreatedAt($value)
- * @method static Builder|Gift whereDescription($value)
- * @method static Builder|Gift whereGiftsBagId($value)
- * @method static Builder|Gift whereHasWins(?\App\Enums\WonGiftStatusEnum $status = null)
- * @method static Builder|Gift whereId($value)
- * @method static Builder|Gift whereName($value)
- * @method static Builder|Gift whereRelativeProbability($value)
- * @method static Builder|Gift whereUpdatedAt($value)
- * @method static Builder|Gift withCountWins(?\App\Models\User $user = null, ?\App\Enums\WonGiftStatusEnum $status = null)
- * @method static Builder|Gift withProbability()
- * @method static Builder|Gift wonBy(\App\Models\User $user)
- *
- * @mixin \Eloquent
- */
 class Gift extends Model
 {
     use BelongsToThrough;
@@ -108,7 +73,7 @@ class Gift extends Model
         return $builder->whereRelation('wallets', 'wallets.id', $user->wallet->id);
     }
 
-    public function scopeWithCountWins(Builder $builder, ?User $user = null, ?WonGiftStatusEnum $status = null): Builder
+    public function scopeWithCountWins(Builder $builder, ?User $user, ?WonGiftStatusEnum $status): Builder
     {
         return $builder->withCount([
             'wons as count_wins'.($status ? '_'.$status->name : '') => function (Builder $builder) use ($user, $status) {
@@ -122,7 +87,7 @@ class Gift extends Model
         ]);
     }
 
-    public function scopeWhereHasWins(Builder $builder, ?User $user, ?WonGiftStatusEnum $status = null)
+    public function scopeWhereHasWins(Builder $builder, ?User $user, ?WonGiftStatusEnum $status)
     {
         return $builder->whereHas('wons', function (Builder $builder) use ($user, $status) {
             if ($user) {
@@ -134,7 +99,7 @@ class Gift extends Model
         });
     }
 
-    public function scopeOwnedBy(Builder $builder, ?User $user = null): Builder
+    public function scopeOwnedBy(Builder $builder, ?User $user): Builder
     {
         return $builder->whereRelation('owner', function (Builder $builder) use ($user) {
             return $builder->where('users.id', $user->id);
