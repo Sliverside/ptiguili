@@ -23,7 +23,7 @@ class GiftsController extends Controller
         $gifts = Gift::wonBy(Auth::user())
             ->withCountWins(Auth::user())
             ->withCountWins(Auth::user(), WonGiftStatusEnum::pending)
-            ->whereHasWins(WonGiftStatusEnum::pending)
+            ->whereHasWins(Auth::user(), WonGiftStatusEnum::pending)
             ->get();
 
         return view('gifts/index', ['wonGifts' => $gifts]);
@@ -152,12 +152,8 @@ class GiftsController extends Controller
             ->with('wons', function ($builder) {
                 $builder->where('status', WonGiftStatusEnum::pending);
             })
-            ->whereHasWins(WonGiftStatusEnum::pending)
+            ->whereHasWins(Auth::user(), WonGiftStatusEnum::pending)
             ->get();
-
-        // $pendingGifts->each(fn($gift) => dump($gift->wons));
-
-        // die();
 
         return view('gifts/pending', ['pendingGifts' => $pendingGifts]);
     }

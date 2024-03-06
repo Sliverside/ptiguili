@@ -122,9 +122,12 @@ class Gift extends Model
         ]);
     }
 
-    public function scopeWhereHasWins(Builder $builder, ?WonGiftStatusEnum $status = null)
+    public function scopeWhereHasWins(Builder $builder, ?User $user, ?WonGiftStatusEnum $status = null)
     {
-        return $builder->whereHas('wons', function (Builder $builder) use ($status) {
+        return $builder->whereHas('wons', function (Builder $builder) use ($user, $status) {
+            if ($user) {
+                $builder->whereBelongsTo($user->wallet);
+            }
             if ($status) {
                 $builder->where('status', $status);
             }
