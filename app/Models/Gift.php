@@ -73,7 +73,7 @@ class Gift extends Model
         return $builder->whereRelation('wallets', 'wallets.id', $user->wallet->id);
     }
 
-    public function scopeWithCountWins(Builder $builder, ?User $user, ?WonGiftStatusEnum $status): Builder
+    public function scopeWithCountWins(Builder $builder, ?User $user = null, ?WonGiftStatusEnum $status = null): Builder
     {
         return $builder->withCount([
             'wons as count_wins'.($status ? '_'.$status->name : '') => function (Builder $builder) use ($user, $status) {
