@@ -16,7 +16,6 @@
         <form action="{{ route('gifts.confirm', $win) }}" method="POST">
           @method('patch')
           @csrf()
-          <input type="file">
           <x-primary-button class="bg-lime-500 hover:bg-lime-400">{{ __('Confirmer l\'éxexcution') }}</x-primary-button>
         </form>
       </div>

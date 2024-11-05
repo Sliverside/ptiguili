@@ -44,6 +44,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/gifts/confirm/{wonGift}', [GiftsController::class, 'confirm'])->name('gifts.confirm');
     Route::post('/gifts/request/{gift}', [GiftsController::class, 'request'])->name('gifts.request');
     Route::get('/gifts/{gift}', [GiftsController::class, 'show'])->name('gifts.show');
+    Route::get('/gifts/{gift}/owner-qrcode.svg', [GiftsController::class, 'showOwnerLinkQrcode'])->name('gifts.showOwnerLinkQrcode');
     Route::patch('/gifts/{gift}', [GiftsController::class, 'update'])->name('gifts.update');
     Route::delete('/gifts/{gift}', [GiftsController::class, 'delete'])->name('gifts.delete');
 

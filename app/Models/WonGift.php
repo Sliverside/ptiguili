@@ -38,6 +38,13 @@ class WonGift extends Model
         });
     }
 
+    public function scopeWinedBy(Builder $builder, User $user)
+    {
+        return $builder->whereRelation('winner', function (Builder $builder) use ($user) {
+            return $builder->where('users.id', $user->id);
+        });
+    }
+
     protected $casts = [
         'status' => WonGiftStatusEnum::class,
     ];

@@ -17,7 +17,7 @@
             </ul>
             <hr>
             <div class="tableLikeList__item">
-                <a class="btn w-100" href="{{ route('gifts.list') }}">Voir tout (12)</a>
+                <a class="btn w-100" href="{{ route('gifts.list') }}">Voir tout ({{ $wonGiftsCount }})</a>
             </div>
         </div>
         <hr>

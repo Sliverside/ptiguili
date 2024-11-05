@@ -13,10 +13,7 @@
       <div class="mt-5 bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6 text-gray-900">
         <p>tu as gagner ce cadeau {{ $gift->count_wins }} foi(s), tu l'as utilisé {{ $gift->count_wins_used }} foi(s)</p>
         @if ($gift->count_wins_pending > 0)
-          <img src="{{ $qrcode }}" alt="qrcode" width="296" style="max-width: 100%">
-          @env('local')
-            <a href="{{ $ownerLink }}">{{ $ownerLink }}</a>
-          @endenv
+          <img src="{{ route('gifts.showOwnerLinkQrcode', $gift) }}" alt="qrcode" width="296" style="max-width: 100%">
           {{-- <form class="mt-2" action="{{ route('gifts.request', $gift) }}" method="post">
             @csrf
             <x-primary-button class="bg-lime-500 hover:bg-lime-400">Demander ce cadeau par mail</x-primary-button>
