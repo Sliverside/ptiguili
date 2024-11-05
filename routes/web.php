@@ -38,6 +38,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/gifts-bag/{giftsBag}', [GiftsBagsController::class, 'update'])->name('giftsBag.update');
 
     Route::post('/gifts', [GiftsController::class, 'store'])->name('gifts.store');
+    Route::get('/gifts/list', [GiftsController::class, 'list'])->name('gifts.list');
     // Route::get('/gifts/pending', [GiftsController::class, 'pending'])->name('gifts.pending');
     Route::get('/gifts/pending/{wonGift}', [GiftsController::class, 'pendingDetail'])->name('gifts.pendingDetail');
     Route::patch('/gifts/confirm/{wonGift}', [GiftsController::class, 'confirm'])->name('gifts.confirm');

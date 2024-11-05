@@ -16,10 +16,14 @@ class GiftFactory extends Factory
      */
     public function definition()
     {
+        $price = random_int(20, 200) * (random_int(0, 3) ? 1 : -1);
+
         return [
             'name' => fake()->sentence(random_int(1, 4)),
             'description' => fake()->text(),
             'relative_probability' => random_int(0, 1000) / 10,
+            'price' => $price,
+            'sell_price' => $price < 0 ? 0 : floor($price * (random_int(50, 75) / 100)),
         ];
     }
 }

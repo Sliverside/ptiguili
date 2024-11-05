@@ -17,7 +17,7 @@ class WalletFactory extends Factory
     public function definition()
     {
         return [
-            'coins' => 500,
+            'coins' => random_int(500, 5000),
         ];
     }
 }

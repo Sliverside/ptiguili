@@ -19,6 +19,8 @@ class Gift extends Model
         'name',
         'description',
         'relative_probability',
+        'price',
+        'sell_price',
     ];
 
     public function giftsBag()

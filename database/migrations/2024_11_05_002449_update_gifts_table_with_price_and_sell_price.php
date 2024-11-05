@@ -13,11 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('partner_id')
-                ->nullable();
-            // ->constrained('users')
-            // ->onDelete('set null')
+        Schema::table('gifts', function (Blueprint $table) {
+            $table->integer('price')->default(1);
+            $table->integer('sell_price')->default(null)->unsigned()->nullable();
         });
     }
 
@@ -28,8 +26,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('partner_id');
+        Schema::table('gifts', function (Blueprint $table) {
+            $table->dropColumn(['price', 'sell_price']);
         });
     }
 };

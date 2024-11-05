@@ -22,11 +22,22 @@ class GiftsController extends Controller
     {
         $gifts = Gift::wonBy(Auth::user())
             ->withCountWins(Auth::user())
+            ->whereHasWins(Auth::user(), WonGiftStatusEnum::pending)
+            ->take(3)
+            ->get();
+
+        return view('gifts/index', ['wonGifts' => $gifts]);
+    }
+
+    public function list()
+    {
+        $gifts = Gift::wonBy(Auth::user())
+            ->withCountWins(Auth::user())
             ->withCountWins(Auth::user(), WonGiftStatusEnum::pending)
             ->whereHasWins(Auth::user(), WonGiftStatusEnum::pending)
             ->get();
 
-        return view('gifts/index', ['wonGifts' => $gifts]);
+        return view('gifts/list', ['wonGifts' => $gifts]);
     }
 
     public function show(int $id)

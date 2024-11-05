@@ -12,11 +12,6 @@ class WalletsController extends Controller
 {
     public function useCoin(Request $request)
     {
-        if ($request->user()->wallet->coins <= 0) {
-            Flashes::push("tu n'as pas assez de points !", FlashTypeEnum::danger);
-
-            return back();
-        }
 
         $partner = User::with('giftsBag', 'gifts')
             ->where('id', $request->user()->partner_id)
@@ -28,7 +23,13 @@ class WalletsController extends Controller
             return back();
         }
 
-        $request->user()->wallet->coins -= 1;
+        $request->user()->wallet->coins -= config('app.wheelGamePrice');
+
+        if ($request->user()->wallet->coins < 0) {
+            Flashes::push("Il te manque " . ($request->user()->wallet->coins * -1) . " points pour pouvoir joué. Dommage...", FlashTypeEnum::danger);
+
+            return back();
+        }
         $request->user()->wallet->update();
 
         if ($partner->giftsBag->success) {

@@ -7,6 +7,10 @@
   --font-color: #343434;
 }
 
+button {
+  cursor: pointer;
+}
+
 /* utilities */
 .w-100 {
   width: 100%;
@@ -55,6 +59,7 @@ h1, .h1 {
   color: var(--primary-color);
   font-size: 18px;
   font-weight: normal;
+  margin-bottom: 3em;
 }
 
 .tableLikeList {
@@ -75,6 +80,7 @@ h1, .h1 {
 
 .tableLikeList__item {
   display: flex;
+  gap: 10px;
   font-size: 14px;
   font-weight: 600;
   justify-content: space-between;
@@ -86,7 +92,13 @@ h1, .h1 {
   }
 }
 
+.p-bold {
+  font-size: 14px;
+  font-weight: bold;
+}
+
 .btn {
+  display: inline-block;
   border: 2px solid var(--primary-color);
   border-radius: 6px;
   background-color: #fff;
@@ -95,6 +107,8 @@ h1, .h1 {
   margin: 0 0 4px 3px;
   color: var(--primary-color);
   font-size: 14px;
+  text-decoration: none;
+  text-align: center;
 }
 
 .btn--big {

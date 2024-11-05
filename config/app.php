@@ -212,4 +212,5 @@ return [
         'Flashes' => \App\Services\Flashes::class,
     ])->toArray(),
 
+    'wheelGamePrice' => 50,
 ];

@@ -52,14 +52,14 @@ class User extends Authenticatable
             }
         });
 
-        static::created(function (self $user) {
-            if (! $user->wallet) {
-                $user->wallet()->create();
-            }
-            if (! $user->giftsBag) {
-                $user->giftsBag()->create();
-            }
-        });
+        // static::created(function (self $user) {
+        //     if (! $user->wallet) {
+        //         $user->wallet()->create();
+        //     }
+        //     if (! $user->giftsBag) {
+        //         $user->giftsBag()->create();
+        //     }
+        // });
     }
 
     public function giftsBag()
