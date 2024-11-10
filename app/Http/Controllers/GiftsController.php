@@ -153,6 +153,40 @@ class GiftsController extends Controller
         return back();
     }
 
+    public function sell(Request $request, int $id)
+    {
+        /** @var ?Gift */
+        $gift = Gift::wonBy($request->user())->find($id);
+
+        $oldestWonPending = null;
+
+        if ($gift) {
+            $oldestWonPending = $gift->oldestWon($request->user(), WonGiftStatusEnum::pending);
+        }
+
+        if (! $gift || ! $oldestWonPending) {
+            Flashes::push("tu n'as pas de cadeau \"$gift->name\" en attente", FlashTypeEnum::danger);
+
+            return back();
+        }
+
+        if (!$gift->sell_price || $gift->sell_price <= 0) {
+            Flashes::push("Le cadeau \"$gift->name\" ne peut pas être vendu...", FlashTypeEnum::danger);
+
+            return back();
+        }
+
+        $request->user()->wallet->coins += $gift->sell_price;
+        $request->user()->wallet->update();
+
+        $oldestWonPending->status = WonGiftStatusEnum::sold;
+        $oldestWonPending->update();
+
+        Flashes::push("félicitation ton cadeau \"$gift->name\" à bien été vendu pour " . $gift->sell_price . '<span class="coin"></span> !');
+
+        return back();
+    }
+
     public function confirm(Request $request, int $id)
     {
         $wonGift = WonGift::ownedBy($request->user())

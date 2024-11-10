@@ -10,9 +10,13 @@
                 <div class="btnsGroup">
                     @if ($gift->count_wins_pending)
                         <a class="btn no-wrap" href="{{ route('gifts.show', $gift) }}">Utiliser ({{ $gift->price }} <span class="coin"></span>)</a>
-                        <a class="btn no-wrap" href="#">Vendre (+{{ $gift->sell_price }} <span class="coin"></span>)</a>
+                        @if ($gift->sell_price)
+                            <form action="{{ route('gifts.sell', $gift) }}" method="POST">
+                                @csrf
+                                <button class="btn no-wrap">Vendre (+{{ $gift->sell_price }} <span class="coin"></span>)</button>
+                            </form>
+                        @endif
                     @endif
-                    <a class="btn no-wrap" href="{{ route('gifts.show', $gift) }}">Plus d'infos</a>
                 </div>
                 <hr>
             </article>
