@@ -55,21 +55,11 @@ class GiftsController extends Controller
         return view('gifts/show', ['gift' => $gift]);
     }
 
-    public function showOwnerLinkQrcode(int $id)
+    public function showOwnerLinkQrcode(Request $request, Gift $gift)
     {
-        $wonGift = WonGift::query()
-            ->where('gift_id', $id)
-            ->where('status', WonGiftStatusEnum::pending)
-            ->winedBy(Auth::user())
-            ->orderBy('id', 'ASC')
-            ->firstOrFail();
-
-        $ownerLink = route('gifts.pendingDetail', $wonGift);
-
+        $ownerLink = $gift->getOwnerLink($request->user());
         $options = new QROptions();
-
         $options->outputBase64 = false;
-
         $qrcode = new QRCode($options);
 
         return new Response($qrcode->render($ownerLink), 200, [
@@ -245,7 +235,7 @@ class GiftsController extends Controller
             return redirect()->route('giftsBag');
         }
 
-        return view('gifts/pendingDetail', [
+        return view('gifts.pendingDetail', [
             'win' => $win,
             'gift' => $win->gift,
         ]);

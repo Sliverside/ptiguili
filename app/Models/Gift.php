@@ -55,6 +55,13 @@ class Gift extends Model
         })->first();
     }
 
+    public function getOwnerLink(User $winner)
+    {
+        $oldestWonPending = $this->oldestWon($winner, WonGiftStatusEnum::pending);
+
+        return route('gifts.pendingDetail', $oldestWonPending);
+    }
+
     public function scopeWithProbability(Builder $builder): Builder
     {
         return $builder
@@ -87,6 +94,11 @@ class Gift extends Model
                 }
             },
         ]);
+    }
+
+    public function scopeWithOwnerLink()
+    {
+
     }
 
     public function scopeWhereHasWins(Builder $builder, ?User $user, ?WonGiftStatusEnum $status)
